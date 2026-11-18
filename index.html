@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Nava Bhasha — The Nine Tongues League</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;1,400&family=Archivo:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;600&family=Noto+Sans+Malayalam:wght@400;600&family=Noto+Sans+Telugu:wght@400;600&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFBF3; --bg2:#FFF6E6; --surface:#FFFFFF; --surface2:#FDF6E9;
+    --ink:#1C1917; --ink2:#57534E; --ink3:#78716C; --line:#E7DDC8; --line2:#EDE8DD;
+    --accent:#9A3412; --accent2:#B45309; --gold:#D97706; --teal:#0F766E;
+    --card-shadow:0 1px 3px rgba(28,25,23,.06), 0 8px 24px rgba(28,25,23,.04);
+    --radius:16px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#131110; --bg2:#1A1714; --surface:#1E1B18; --surface2:#26221E;
+      --ink:#F5F0E8; --ink2:#D6CFC2; --ink3:#A8A29E; --line:#332E28; --line2:#2A2622;
+      --accent:#FDBA74; --accent2:#F59E0B; --gold:#FBBF24; --teal:#2DD4BF;
+      --card-shadow:0 1px 3px rgba(0,0,0,.4);
+    }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Archivo",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent)}
+  button{min-height:44px}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px 56px}
+  /* HERO */
+  .hero{padding:36px 0 8px}
+  .hero-top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+  .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;letter-spacing:.02em}
+  .pill i{width:8px;height:8px;border-radius:50%;background:#16A34A;display:block;box-shadow:0 0 0 4px rgba(22,163,74,.15)}
+  .pill.gold i{background:var(--gold);box-shadow:0 0 0 4px rgba(217,119,6,.16)}
+  h1,h2,h3{font-family:"Spectral",Georgia,serif;line-height:1.05;letter-spacing:-.02em}
+  h1{font-size:clamp(42px,7vw,76px);margin:18px 0 6px;font-weight:700}
+  h1 em{font-style:italic;font-weight:400;color:var(--accent)}
+  .hero-sub{font-size:clamp(17px,2.2vw,21px);line-height:1.5;color:var(--ink2);max-width:720px;margin:0}
+  .hero-sub strong{color:var(--ink)}
+  .meta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+  .meta{flex:1 1 160px;background:var(--surface);border:1px solid var(--line2);border-radius:14px;padding:14px 16px;box-shadow:var(--card-shadow)}
+  .meta small{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);font-weight:700;margin-bottom:4px}
+  .meta b{font-size:16px;line-height:1.3;display:block}
+  .meta span{font-size:13.5px;color:var(--ink2)}
+  #countdown{font-variant-numeric:tabular-nums}
+  /* ORBIT STRIP */
+  .orbit{margin:26px 0 6px;background:var(--ink);color:#FFFBEB;border-radius:20px;padding:20px 20px 18px;overflow:hidden;position:relative}
+  @media (prefers-color-scheme: dark){ .orbit{background:#292524} }
+  .orbit h3{color:#FDE68A;margin:0 0 4px;font-size:18px}
+  .orbit p{margin:0;color:#E7E5E4;font-size:14.5px;max-width:640px}
+  .orbit-symbols{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .orbit-symbols span{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);padding:8px 11px;border-radius:999px;font-size:13.5px;font-weight:600}
+  .orbit-symbols b{font-size:18px;line-height:1}
+  /* SECTION */
+  section{margin-top:42px}
+  .sec-head{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+  .sec-head h2{font-size:32px;margin:0}
+  .sec-head p{margin:4px 0 0;color:var(--ink2);max-width:620px;font-size:15.5px}
+  .kicker{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--accent2);margin-bottom:6px}
+  /* GRID */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:860px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--line2);border-radius:18px;padding:18px;box-shadow:var(--card-shadow);position:relative;overflow:hidden}
+  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c,#D97706)}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .sym{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;font-size:26px;background:var(--surface2);border:1px solid var(--line)}
+  .level{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);padding:5px 8px;border-radius:999px;color:var(--ink2);white-space:nowrap}
+  .card h3{font-size:22px;margin:12px 0 2px}
+  .card h3 span{font-family:"Archivo",sans-serif;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:2px}
+  .native{font-size:20px;line-height:1.3;margin:6px 0 2px}
+  .native small{display:block;font-family:"Archivo",sans-serif;font-size:12.5px;color:var(--ink3);letter-spacing:.02em}
+  .card p{margin:8px 0 0;font-size:14.5px;color:var(--ink2);line-height:1.55}
+  .card-foot{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);display:flex;justify-content:space-between;font-size:13px;color:var(--ink3)}
+  .card-foot b{color:var(--ink)}
+  /* SESSION */
+  .session-bar{display:flex;border-radius:14px;overflow:hidden;border:1px solid var(--line);margin:16px 0}
+  .seg{padding:16px}
+  .seg-1{flex:3;background:#9A3412;color:white}
+  .seg-2{flex:2;background:#0F766E;color:white}
+  .seg-3{flex:1;background:#1C1917;color:#FDE68A}
+  @media(prefers-color-scheme:dark){.seg-3{background:#E7E5E4;color:#1C1917}}
+  .seg b{font-size:22px;display:block;line-height:1}
+  .seg span{font-size:13px;opacity:.92;display:block;margin-top:4px;line-height:1.4}
+  @media(max-width:640px){.session-bar{flex-direction:column}.seg{flex:none}}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:720px){.cols{grid-template-columns:1fr}}
+  .box{background:var(--surface);border:1px solid var(--line2);border-radius:16px;padding:18px;box-shadow:var(--card-shadow)}
+  .box h3{margin:0 0 8px;font-size:19px}
+  .box p,.box li{font-size:14.5px;color:var(--ink2)}
+  .box ul{margin:8px 0 0;padding-left:18px}
+  .box li{margin:5px 0}
+  /* WEEK SELECTOR */
+  .day-btns{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+  .day-btns button{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:10px 16px;font-weight:600;font-size:14px;cursor:pointer;min-width:52px}
+  .day-btns button.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .day-panel{background:var(--surface);border:1px solid var(--line2);border-radius:18px;padding:20px;display:grid;grid-template-columns:1.2fr .8fr;gap:20px;box-shadow:var(--card-shadow)}
+  @media(max-width:700px){.day-panel{grid-template-columns:1fr}}
+  .day-panel h3{font-size:26px;margin:0 0 6px}
+  .day-panel p{color:var(--ink2);margin:0;font-size:15px}
+  .detail-list{margin:0;padding:0;list-style:none}
+  .detail-list li{padding:10px 0;border-bottom:1px solid var(--line2);font-size:14.5px;display:flex;justify-content:space-between;gap:12px}
+  .detail-list li:last-child{border:none}
+  .detail-list span{color:var(--ink3)}
+  /* TIMELINE */
+  .timeline{display:grid;gap:10px}
+  .t-row{display:grid;grid-template-columns:92px 1fr auto;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line2);border-radius:14px;padding:14px 16px}
+  @media(max-width:600px){.t-row{grid-template-columns:1fr;gap:4px}}
+  .t-day{font-weight:700;font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+  .t-day small{display:block;font-weight:500;text-transform:none;letter-spacing:0;color:var(--ink3);font-size:13px;margin-top:2px}
+  .t-row p{margin:0;font-size:14.5px;color:var(--ink2)}
+  .t-row p b{color:var(--ink)}
+  .tag{font-size:12px;font-weight:700;padding:6px 9px;border-radius:999px;background:var(--surface2);border:1px solid var(--line);white-space:nowrap}
+  .tag.today{background:#DCFCE7;border-color:#BBF7D0;color:#166534}
+  @media(prefers-color-scheme:dark){.tag.today{background:#14532D;color:#BBF7D0;border-color:#166534}}
+  /* MECHANICS */
+  .mech{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  @media(max-width:700px){.mech{grid-template-columns:1fr}}
+  .mech article{background:var(--surface);border:1px solid var(--line2);border-radius:16px;padding:18px}
+  .mech article b.num{font-family:"Spectral",serif;font-size:28px;color:var(--accent2);line-height:1}
+  .mech h3{font-size:18px;margin:6px 0 4px;font-family:"Archivo",sans-serif;letter-spacing:-.01em}
+  .mech p{margin:0;font-size:14.5px;color:var(--ink2)}
+  /* LEVELS TABLE */
+  .levels{overflow:hidden;border:1px solid var(--line2);border-radius:16px;background:var(--surface)}
+  .lv-row{display:grid;grid-template-columns:56px 140px 1fr;gap:12px;padding:13px 16px;border-bottom:1px solid var(--line2);align-items:center}
+  .lv-row:last-child{border:none}
+  @media(max-width:600px){.lv-row{grid-template-columns:40px 1fr}.lv-row span{grid-column:2}}
+  .lv-num{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;background:var(--surface2);border:1px solid var(--line)}
+  .lv-row b{font-size:15px}
+  .lv-row span{font-size:14.5px;color:var(--ink2)}
+  /* WIN LIST */
+  .wins{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  @media(max-width:700px){.wins{grid-template-columns:1fr}}
+  .wins li{background:var(--surface);border:1px solid var(--line2);border-radius:12px;padding:13px 14px 13px 42px;position:relative;font-size:14.5px;color:var(--ink2)}
+  .wins li::before{content:"○";position:absolute;left:14px;top:11px;font-size:18px;color:var(--accent2)}
+  .wins li b{color:var(--ink)}
+  footer{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;color:var(--ink3);font-size:13.5px}
+  .tamil{font-family:"Noto Sans Tamil",sans-serif} .mal{font-family:"Noto Sans Malayalam",sans-serif} .tel{font-family:"Noto Sans Telugu",sans-serif} .hin{font-family:"Noto Sans Devanagari",sans-serif}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <!-- HERO -->
+  <header class="hero">
+    <div class="hero-top">
+      <span class="pill"><i></i> League starts Wed, Nov 18, 2026</span>
+      <span class="pill gold"><i></i> Daily card · 8:15 PM CT</span>
+    </div>
+    <h1>Nava Bhasha<br><em>The Nine Tongues League</em></h1>
+    <p class="hero-sub">Nine languages. Nine grahas. <strong>30 minutes a day</strong> — one anchor, two satellites chosen by decay, and a five-minute script sprint. You don't play against anyone else. You play against the Forgetting Curve.</p>
+
+    <div class="meta-row" aria-label="League status">
+      <div class="meta"><small>Season</small><b>Week 1 — Placement Week</b><span>Nov 18–24 · Stake-free</span></div>
+      <div class="meta"><small>Scoreboard</small><b>0 sessions · 0 pts · Streak 0</b><span>All nine tracks Unplaced</span></div>
+      <div class="meta"><small>First session</small><b id="countdown">Tomorrow, Nov 18 at 8:15 PM</b><span>Spanish anchor — Phrase Set 1 check</span></div>
+      <div class="meta"><small>Rhythm</small><b>30 min / day</b><span>15 anchor + 10 satellites + 5 script</span></div>
+    </div>
+
+    <div class="orbit">
+      <h3>☉ &nbsp;Tamil is the sun. Everything else orbits it.</h3>
+      <p>Each language sits on the board as a graha — with a level, a points balance, and a decay clock. Rahu and Ketu, the eclipse nodes, hold the two English shadow tracks that sit on top of one language.</p>
+      <div class="orbit-symbols" aria-label="Nine grahas">
+        <span><b>☉</b> Surya · Tamil</span><span><b>☽</b> Chandra · Malayalam</span><span><b>♂</b> Mangala · Telugu</span><span><b>☿</b> Budha · Hindi</span><span><b>♃</b> Guru · German</span><span><b>♀</b> Shukra · Spanish</span><span><b>♄</b> Shani · English US</span><span><b>☊</b> Rahu · English UK</span><span><b>☋</b> Ketu · English Core</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- NINE TRACKS -->
+  <section id="tracks">
+    <div class="sec-head">
+      <div><div class="kicker">The board</div><h2>The nine tracks</h2><p>Every track starts at Level 0 — Unplaced. Week 1 fixes that honestly. “I don’t know” is a valid answer all week; a false placement poisons the auction for months.</p></div>
+    </div>
+    <div class="grid">
+      <article class="card" style="--c:#D97706"><div class="card-top"><div class="sym">☉</div><span class="level">Level 0 · Unplaced</span></div><h3><span>Surya</span>Tamil</h3><div class="native tamil">வணக்கம் <small>Vaṇakkam — Formal register + reading / writing fluency</small></div><p>Your mother tongue is the sun. Saturday is formal day: reading and writing, not conversation. Spoken Tamil doesn’t count toward this level.</p><div class="card-foot"><span>Anchor: <b>Saturday</b></span><span>0 pts</span></div></article>
+
+      <article class="card" style="--c:#64748B"><div class="card-top"><div class="sym">☽</div><span class="level">Level 0 · Unplaced</span></div><h3><span>Chandra</span>Malayalam</h3><div class="native mal">നമസ്കാരം <small>Namaskāram — Closest kin to Tamil</small></div><p>Script + conversation. The script will look like a beautiful knot at first — that’s fine. Kinship and home words come first.</p><div class="card-foot"><span>Anchor: <b>Thursday</b></span><span>0 pts</span></div></article>
+
+      <article class="card" style="--c:#DC2626"><div class="card-top"><div class="sym">♂</div><span class="level">Level 0 · Unplaced</span></div><h3><span>Mangala</span>Telugu</h3><div class="native tel">నమస్కారం <small>Namaskāram — Script + conversation</small></div><p>Script recognition, greetings, and listening from Day 2 of placement week. One snippet at a time.</p><div class="card-foot"><span>Anchor: <b>Tuesday</b></span><span>0 pts</span></div></article>
+
+      <article class="card" style="--c:#059669"><div class="card-top"><div class="sym">☿</div><span class="level">Level 0 · Unplaced</span></div><h3><span>Budha</span>Hindi</h3><div class="native hin">नमस्ते <small>Namaste — The link language</small></div><p>Devanagari + conversation. Placement probe: read 5 words, greet, count to 20, five survival phrases.</p><div class="card-foot"><span>Anchor: <b>Monday</b></span><span>0 pts</span></div></article>
+
+      <article class="card" style="--c:#CA8A04"><div class="card-top"><div class="sym">♃</div><span class="level">Level 0 · Unplaced</span></div><h3><span>Guru</span>German</h3><div class="native">Guten Tag <small>The structured learner’s language</small></div><p>Grammar discipline pays here. Greetings, numbers, five phrases, and one listening snippet to place.</p><div class="card-foot"><span>Anchor: <b>Friday</b></span><span>0 pts</span></div></article>
+
+      <article class="card" style="--c:#DB2777"><div class="card-top"><div class="sym">♀</div><span class="level">Level 0 · Unplaced</span></div><h3><span>Shukra</span>Spanish</h3><div class="native">Buenos días <small>Travel-first · Your travel goal lives here</small></div><p><strong style="color:var(--ink)">Day 1 anchor.</strong> A retention check on Phrase Set 1 — what survived, what’s gone. That <em>is</em> the placement. Target: Level 2 by Day 90.</p><div class="card-foot"><span>Anchor: <b>Wednesday</b></span><span>0 pts · Starts Nov 18</span></div></article>
+
+      <article class="card" style="--c:#1E3A5F"><div class="card-top"><div class="sym">♄</div><span class="level">Level 0 · Unplaced</span></div><h3><span>Shani</span>English (US)</h3><div class="native">Howdy <small>Your Texas everyday</small></div><p>Workplace idiom, small talk, local register. Shani is slow, daily, unglamorous — and it compounds.</p><div class="card-foot"><span>Anchor: <b>Sunday lab</b></span><span>0 pts</span></div></article>
+
+      <article class="card" style="--c:#475569"><div class="card-top"><div class="sym">☊</div><span class="level">Level 0 · Unplaced</span></div><h3><span>Rahu</span>English (UK)</h3><div class="native">Good morning <small>British idiom &amp; dry register</small></div><p>The shadow pair, part one. Spelling, idiom, dry humour — and yes, the sitcoms count as listening practice.</p><div class="card-foot"><span>Anchor: <b>Sunday lab</b></span><span>0 pts</span></div></article>
+
+      <article class="card" style="--c:#78716C"><div class="card-top"><div class="sym">☋</div><span class="level">Level 0 · Unplaced</span></div><h3><span>Ketu</span>English — Core</h3><div class="native">Precision <small>The shared trunk under US / UK</small></div><p>Precision grammar, vocabulary depth, writing. The trunk that both English branches grow from.</p><div class="card-foot"><span>Anchor: <b>Sunday lab</b></span><span>0 pts</span></div></article>
+    </div>
+  </section>
+
+  <!-- DAILY SESSION -->
+  <section id="session">
+    <div class="sec-head"><div><div class="kicker">Every evening · 8:15 PM</div><h2>One session, three blocks</h2><p>New ground is only ever broken in the anchor. Satellites are chosen by the auction, not by mood. Scripts get their own slot because they decay differently from speech.</p></div></div>
+    <div class="session-bar" role="img" aria-label="Session split: 15 minutes anchor, 10 minutes satellites, 5 minutes script sprint">
+      <div class="seg seg-1"><b>15 min — Anchor</b><span>Deep work on the day’s language: lesson, phrase set, listening + shadowing.</span></div>
+      <div class="seg seg-2"><b>10 min — Satellites</b><span>2 × 5 min review drills in two other languages, picked by highest decay debt.</span></div>
+      <div class="seg seg-3"><b>5 min — Script sprint</b><span>Reading + writing only. One script per day.</span></div>
+    </div>
+    <div class="cols">
+      <div class="box"><h3>Script sprint rotation</h3><p>Repeating 4-day cycle, so no script starves:</p><ul><li><b>Tamil</b> → <b>Devanagari</b> → <b>Telugu</b> → <b>Malayalam</b> → repeat</li><li>Goal by Day 90: all four readable at Level 1 — a shop sign, a menu, a bus board.</li></ul></div>
+      <div class="box"><h3>Eclipse days</h3><p>Some days will be chaos — the baby is coming in January, and life will not ask permission.</p><ul><li>A declared <b>10-minute minimum</b> (anchor only) keeps the streak alive at reduced points.</li><li>Declaring an eclipse costs nothing. <b>Skipping silently is the only real loss.</b> Rahu and Ketu approve.</li></ul></div>
+    </div>
+  </section>
+
+  <!-- WEEKLY ROTATION -->
+  <section id="week">
+    <div class="sec-head"><div><div class="kicker">Weekly rotation</div><h2>Who anchors, when</h2><p>Every language anchors once a week. Nobody starves; nobody feasts. Tap a day to see its session shape.</p></div></div>
+    <div class="day-btns" role="tablist" aria-label="Day of week">
+      <button data-day="mon" role="tab">Mon</button><button data-day="tue" role="tab">Tue</button><button data-day="wed" class="active" role="tab" aria-selected="true">Wed</button><button data-day="thu" role="tab">Thu</button><button data-day="fri" role="tab">Fri</button><button data-day="sat" role="tab">Sat</button><button data-day="sun" role="tab">Sun</button>
+    </div>
+    <div class="day-panel" id="dayPanel"></div>
+  </section>
+
+  <!-- PLACEMENT WEEK -->
+  <section id="placement">
+    <div class="sec-head"><div><div class="kicker">Nov 18–24, 2026</div><h2>Week 1 — Placement week</h2><p>Small, concrete, honest. Every day is a normal 30-minute session; the anchor is a probe, not a lesson. Week 1 is stake-free.</p></div><span class="tag today">● Starts tomorrow</span></div>
+    <div class="timeline">
+      <div class="t-row"><div class="t-day">Wed Nov 18<small>Day 1 · League start</small></div><p><b>Spanish anchor</b> — Retention check on Phrase Set 1 from your travel goal. Plus two satellite reviews + script sprint (Telugu). First reward card.</p><span class="tag">Shukra ♀</span></div>
+      <div class="t-row"><div class="t-day">Thu Nov 19<small>Day 2</small></div><p><b>Malayalam probe</b> — Script recognition, kinship &amp; home words, greetings. Script sprint: Malayalam.</p><span class="tag">Chandra ☽</span></div>
+      <div class="t-row"><div class="t-day">Fri Nov 20<small>Day 3</small></div><p><b>German probe</b> — Greetings, numbers, 5 phrases, one listening snippet. Script sprint: Tamil.</p><span class="tag">Guru ♃</span></div>
+      <div class="t-row"><div class="t-day">Sat Nov 21<small>Day 4</small></div><p><b>Tamil, formal</b> — Read one short formal paragraph aloud; write 5 sentences by hand. Placement is about the formal register. Script sprint: Devanagari.</p><span class="tag">Surya ☉</span></div>
+      <div class="t-row"><div class="t-day">Sun Nov 22<small>Day 5</small></div><p><b>English lab</b> — Rewrite 3 sentences US → UK and back; spot-the-idiom round across US / UK / Core. Script sprint: Telugu.</p><span class="tag">English lab</span></div>
+      <div class="t-row"><div class="t-day">Mon Nov 23<small>Day 6</small></div><p><b>Hindi probe</b> — Read 5 Devanagari words, greet, count to 20, 5 survival phrases. Script sprint: Malayalam.</p><span class="tag">Budha ☿</span></div>
+      <div class="t-row"><div class="t-day">Tue Nov 24<small>Day 7 · Week closes</small></div><p><b>Telugu probe + first Boss Fight</b> — Telugu script &amp; phrases in the anchor, then a 10-min Boss Fight in the week’s weakest track. All nine levels are set, and the first real stake is placed for Week 2.</p><span class="tag">Boss Fight</span></div>
+    </div>
+    <p style="font-size:13.5px;color:var(--ink3);margin-top:10px">Why this order? The league starts on a Wednesday with Spanish, so placement week runs Wed–Tue following the weekly rotation (Wed Spanish → Thu Malayalam → Fri German → Sat Tamil → Sun English → Mon Hindi → Tue Telugu). From Week 2, the same rotation reads Monday-first.</p>
+  </section>
+
+  <!-- GAME -->
+  <section id="game">
+    <div class="sec-head"><div><div class="kicker">Why it works</div><h2>The game underneath</h2><p>Six mechanics, all game theory — not gamification glitter. Each one solves a specific way language practice usually fails.</p></div></div>
+    <div class="mech">
+      <article><b class="num">01</b><h3>The Forgetting Curve is the adversary — minimax</h3><p>Memory decays predictably. The Curve “attacks” where retention is weakest, so your optimal play is to minimise your maximum loss: study what’s closest to being forgotten, not what’s most fun.</p></article>
+      <article><b class="num">02</b><h3>The morning auction — mechanism design</h3><p>Each language bids for the two satellite slots with its decay debt. Highest debts win. Honest self-reporting is the dominant strategy — inflating a bid only steals time from a language that needs it more.</p></article>
+      <article><b class="num">03</b><h3>The weekly stake — Ulysses contract</h3><p>Every Sunday you stake 150 points on the coming week. Each completed day pays 30 — so a perfect 7-day week returns 210: your 150 back plus a 60-point completion bonus. A missed day forfeits its 30. You tie yourself to the mast while you’re strong, for the tired Tuesday evening ahead.</p></article>
+      <article><b class="num">04</b><h3>The Boss Fight — weakest-link test</h3><p>Sunday, 10 minutes in the week’s weakest language. The adversary picks the battlefield, so the rational move all week is to shore up the weakest link. Win +100, show up +25.</p></article>
+      <article><b class="num">05</b><h3>The repeated game — cooperation bonus</h3><p>A streak is a repeated game against your future self. Cooperate today and tomorrow’s player inherits momentum and a multiplier. If Prerna plays any track, shared days pay both of you +25%.</p></article>
+      <article><b class="num">06</b><h3>Reward cards — variable-ratio reinforcement</h3><p>After every session, one card: a phrase worth knowing, a song, a scene, a piece of graha lore, occasionally a wild card. You never know which is coming — that unpredictability is what makes it stick.</p></article>
+    </div>
+  </section>
+
+  <!-- LEVELS + POINTS -->
+  <section id="levels">
+    <div class="sec-head"><div><div class="kicker">Progression</div><h2>Levels &amp; points</h2><p>Same ladder on every track. Points are simple on purpose — so the scoreboard stays honest.</p></div></div>
+    <div class="cols">
+      <div class="levels" aria-label="Levels ladder">
+        <div class="lv-row"><div class="lv-num">0</div><b>Unplaced</b><span>Not yet honestly assessed. Week 1 fixes this.</span></div>
+        <div class="lv-row"><div class="lv-num">1</div><b>Survival</b><span>Greetings, numbers, politeness, ~100 core words; script basics.</span></div>
+        <div class="lv-row"><div class="lv-num">2</div><b>Travel-ready</b><span>Directions, food, transport, money, small problems — without a phone.</span></div>
+        <div class="lv-row"><div class="lv-num">3</div><b>Conversational</b><span>A 10-minute conversation; narrate yesterday and tomorrow.</span></div>
+        <div class="lv-row"><div class="lv-num">4</div><b>Fluent reader</b><span>Read a children’s book or news page unaided. For Tamil: formal essays.</span></div>
+        <div class="lv-row"><div class="lv-num">5</div><b>Mastery track</b><span>Humour, argument, register-switching. Open-ended by design.</span></div>
+      </div>
+      <div class="box"><h3>Points economy</h3><ul>
+        <li><b>Study minute = 10 pts</b> to that language (full session = 300, split by block)</li>
+        <li><b>Boss fight:</b> win +100 · show up +25</li>
+        <li><b>Weekly stake:</b> 150 in, 30 per completed day (perfect week = 210: stake back + 60 bonus)</li>
+        <li><b>Streak multiplier:</b> ×1.1 at 7 days · ×1.25 at 30 days</li>
+        <li><b>Spend on:</b> anchor override (200) · boss-fight postponement (300, once/month) · immersion day unlock (1,000)</li>
+      </ul><p style="margin-top:12px">Your session card arrives at <b>8:15 PM</b> each evening. Muse builds the anchor lesson, runs the auction for satellites, deals the reward card after, and keeps the scoreboard.</p></div>
+    </div>
+  </section>
+
+  <!-- WIN CONDITIONS -->
+  <section id="wins">
+    <div class="sec-head"><div><div class="kicker">First 90 days</div><h2>What winning looks like</h2><p>Not fluency in nine languages in 90 days. Placement, consistency, and one travel-ready track — with no track left behind.</p></div></div>
+    <ul class="wins">
+      <li><b>All nine tracks placed</b> by end of Week 1</li>
+      <li><b>Spanish at Level 2</b> — travel-ready — by Day 90</li>
+      <li><b>All four scripts readable at Level 1</b> — sign, menu, bus board</li>
+      <li><b>Tamil:</b> one short formal text read end-to-end, unaided</li>
+      <li><b>75+ sessions logged</b> out of ~90</li>
+      <li><b>At least one Boss Fight won</b> on every track</li>
+      <li><b>No track left at Level 0</b> after Day 30</li>
+      <li><b>Streak alive</b> — eclipse days count, silent skips don’t</li>
+    </ul>
+  </section>
+
+  <footer>
+    <span>Nava Bhasha — Nine Tongues League · For Raagavan · Starts Wed Nov 18, 2026</span>
+    <span>Daily card 8:15 PM CT · 30 min · If it isn’t on the scoreboard, it didn’t happen.</span>
+  </footer>
+</div>
+
+<script>
+  var DAYS = {
+    mon:{title:"Monday — Hindi", graha:"Budha ☿ · Hindi", anchor:"Hindi — Devanagari + conversation", satellites:"Picked by auction: the two highest decay debts that morning", script:"On the 4-day cycle (Tamil → Devanagari → Telugu → Malayalam)", note:"The link language opens the week. New ground only in the anchor; everything else is review."},
+    tue:{title:"Tuesday — Telugu", graha:"Mangala ♂ · Telugu", anchor:"Telugu — script + conversation", satellites:"Picked by auction: the two highest decay debts that morning", script:"On the 4-day cycle", note:"Telugu anchors on Tuesday in the steady-state rotation."},
+    wed:{title:"Wednesday — Spanish", graha:"Shukra ♀ · Spanish", anchor:"Spanish — travel-first phrases, listening + shadowing", satellites:"Picked by auction: the two highest decay debts that morning", script:"On the 4-day cycle", note:"Feeds your Spanish-for-travel goal directly. Day 1 of the league (Nov 18) is this session: a retention check on Phrase Set 1."},
+    thu:{title:"Thursday — Malayalam", graha:"Chandra ☽ · Malayalam", anchor:"Malayalam — script + conversation, kinship & home words", satellites:"Picked by auction: the two highest decay debts that morning", script:"On the 4-day cycle", note:"Closest kin to Tamil — borrow what Tamil already gives you, then learn where Malayalam diverges."},
+    fri:{title:"Friday — German", graha:"Guru ♃ · German", anchor:"German — structured lesson, grammar discipline", satellites:"Picked by auction: the two highest decay debts that morning", script:"On the 4-day cycle (Latin script — sprint goes to an Indic script)", note:"Guru rewards system. Short, precise, repeatable drills pay fastest here."},
+    sat:{title:"Saturday — Tamil (formal)", graha:"Surya ☉ · Tamil", anchor:"Tamil formal register — reading + writing, not conversation", satellites:"Picked by auction: the two highest decay debts that morning", script:"Devanagari / cycle position", note:"Read a formal paragraph aloud and write by hand. This is the sun’s day — the rest of the system orbits it."},
+    sun:{title:"Sunday — English Lab + Boss Fight", graha:"Shani ♄ · Rahu ☊ · Ketu ☋", anchor:"Boss Fight 10 min → English lab 15 min → Script sprint 5 min", satellites:"No satellites on Sunday — the session reshapes", script:"5 min, closing the session", note:"Boss Fight in the week’s weakest track (win +100). English lab splits US / UK / Core across the weeks. Stake settles today; next week’s 150 is placed."}
+  };
+  var panel = document.getElementById('dayPanel');
+  var btns = Array.prototype.slice.call(document.querySelectorAll('.day-btns button'));
+  function render(day){
+    var d = DAYS[day];
+    panel.innerHTML = '<div><h3>'+d.title+'</h3><p>'+d.note+'</p><p style="margin-top:12px;font-weight:600;color:var(--ink)">'+d.graha+'</p></div>'
+      + '<ul class="detail-list"><li><span>Anchor (15m)</span><b style="text-align:right;max-width:55%">'+d.anchor+'</b></li>'
+      + '<li><span>Satellites (10m)</span><b style="text-align:right;max-width:55%;font-weight:500">'+d.satellites+'</b></li>'
+      + '<li><span>Script sprint (5m)</span><b style="text-align:right;max-width:55%;font-weight:500">'+d.script+'</b></li></ul>';
+    btns.forEach(function(b){ var on = b.getAttribute('data-day')===day; b.classList.toggle('active', on); if(on) b.setAttribute('aria-selected','true'); else b.removeAttribute('aria-selected'); });
+  }
+  btns.forEach(function(b){ b.addEventListener('click', function(){ render(b.getAttribute('data-day')); }); });
+  render('wed');
+
+  // Countdown to first session: Nov 18, 2026 8:15 PM CST (UTC-6) = Nov 19 02:15 UTC
+  (function(){
+    var el = document.getElementById('countdown');
+    var target = new Date('2026-11-19T02:15:00Z').getTime();
+    function tick(){
+      var diff = target - Date.now();
+      if(diff <= 0){ el.textContent = 'Tonight — Wed Nov 18 at 8:15 PM CT'; return; }
+      var h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000);
+      var d = Math.floor(h/24); h = h%24;
+      el.textContent = (d>0 ? d+'d ' : '') + h + 'h ' + m + 'm to first session — Nov 18, 8:15 PM';
+    }
+    tick(); setInterval(tick, 60000);
+  })();
+</script>
+</body>
+</html>
