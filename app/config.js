@@ -8,6 +8,6 @@
 // Replace the two placeholder values below with your project's real ones,
 // then reload the app. Until you do, the app shows a "setup pending" notice.
 window.NAVA_CONFIG = {
-  SUPABASE_URL: "YOUR_SUPABASE_URL",
-  SUPABASE_ANON_KEY: "YOUR_SUPABASE_ANON_KEY"
+  SUPABASE_URL: "https://nzbdtrttornmwpnhmzqy.supabase.co",
+  SUPABASE_ANON_KEY: "sb_publishable_gnOF-TW1BzqpurL-0prw-w_1kkHnGx_"
 };
