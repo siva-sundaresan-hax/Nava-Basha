@@ -1,0 +1,957 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="color-scheme" content="light dark" />
+<link rel="icon" href="data:," />
+<title>Nava Bhasha — The Nine Tongues League</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;1,400&family=Archivo:wght@400;500;600;700&family=Noto+Sans+Tamil:wght@400;600&family=Noto+Sans+Malayalam:wght@400;600&family=Noto+Sans+Telugu:wght@400;600&family=Noto+Sans+Devanagari:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFBF3; --bg2:#FFF6E6; --surface:#FFFFFF; --surface2:#FDF6E9;
+    --ink:#1C1917; --ink2:#57534E; --ink3:#78716C; --line:#E7DDC8; --line2:#EDE8DD;
+    --accent:#9A3412; --accent2:#B45309; --gold:#D97706; --teal:#0F766E;
+    --ok:#166534; --okbg:#DCFCE7; --err:#991B1B; --errbg:#FEE2E2;
+    --card-shadow:0 1px 3px rgba(28,25,23,.06), 0 8px 24px rgba(28,25,23,.04);
+    --radius:16px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#131110; --bg2:#1A1714; --surface:#1E1B18; --surface2:#26221E;
+      --ink:#F5F0E8; --ink2:#D6CFC2; --ink3:#A8A29E; --line:#332E28; --line2:#2A2622;
+      --accent:#FDBA74; --accent2:#F59E0B; --gold:#FBBF24; --teal:#2DD4BF;
+      --ok:#BBF7D0; --okbg:#14532D; --err:#FECACA; --errbg:#450A0A;
+      --card-shadow:0 1px 3px rgba(0,0,0,.4);
+    }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Archivo",system-ui,-apple-system,Segoe UI,Roboto,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--accent)}
+  button{min-height:44px;font-family:inherit}
+  [hidden]{display:none !important}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 20px 56px}
+  /* HERO */
+  .hero{padding:36px 0 8px}
+  .hero-top{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+  .pill{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;letter-spacing:.02em}
+  .pill i{width:8px;height:8px;border-radius:50%;background:#16A34A;display:block;box-shadow:0 0 0 4px rgba(22,163,74,.15)}
+  .pill.gold i{background:var(--gold);box-shadow:0 0 0 4px rgba(217,119,6,.16)}
+  h1,h2,h3{font-family:"Spectral",Georgia,serif;line-height:1.05;letter-spacing:-.02em}
+  h1{font-size:clamp(42px,7vw,76px);margin:18px 0 6px;font-weight:700}
+  h1 em{font-style:italic;font-weight:400;color:var(--accent)}
+  .hero-sub{font-size:clamp(17px,2.2vw,21px);line-height:1.5;color:var(--ink2);max-width:720px;margin:0}
+  .hero-sub strong{color:var(--ink)}
+  .meta-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+  .meta{flex:1 1 160px;background:var(--surface);border:1px solid var(--line2);border-radius:14px;padding:14px 16px;box-shadow:var(--card-shadow)}
+  .meta small{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);font-weight:700;margin-bottom:4px}
+  .meta b{font-size:16px;line-height:1.3;display:block}
+  .meta span{font-size:13.5px;color:var(--ink2)}
+  /* ORBIT STRIP */
+  .orbit{margin:26px 0 6px;background:var(--ink);color:#FFFBEB;border-radius:20px;padding:20px 20px 18px;overflow:hidden;position:relative}
+  @media (prefers-color-scheme: dark){ .orbit{background:#292524} }
+  .orbit h3{color:#FDE68A;margin:0 0 4px;font-size:18px}
+  .orbit p{margin:0;color:#E7E5E4;font-size:14.5px;max-width:640px}
+  .orbit-symbols{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+  .orbit-symbols span{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.14);padding:8px 11px;border-radius:999px;font-size:13.5px;font-weight:600}
+  .orbit-symbols b{font-size:18px;line-height:1}
+  /* SECTION */
+  section{margin-top:42px}
+  .sec-head{display:flex;align-items:end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+  .sec-head h2{font-size:32px;margin:0}
+  .sec-head p{margin:4px 0 0;color:var(--ink2);max-width:620px;font-size:15.5px}
+  .kicker{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:700;color:var(--accent2);margin-bottom:6px}
+  /* GRID + TRACK CARDS */
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media(max-width:860px){.grid{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:560px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--surface);border:1px solid var(--line2);border-radius:18px;padding:18px;box-shadow:var(--card-shadow);position:relative;overflow:hidden}
+  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--c,#D97706)}
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+  .sym{width:48px;height:48px;border-radius:12px;display:grid;place-items:center;font-size:26px;background:var(--surface2);border:1px solid var(--line)}
+  .level{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1px solid var(--line);padding:5px 8px;border-radius:999px;color:var(--ink2);white-space:nowrap}
+  .card h3{font-size:22px;margin:12px 0 2px}
+  .card h3 span{font-family:"Archivo",sans-serif;font-size:13px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink3);display:block;margin-bottom:2px}
+  .native{font-size:20px;line-height:1.3;margin:6px 0 2px}
+  .native small{display:block;font-family:"Archivo",sans-serif;font-size:12.5px;color:var(--ink3);letter-spacing:.02em}
+  .card p{margin:8px 0 0;font-size:14.5px;color:var(--ink2);line-height:1.55}
+  .card-foot{margin-top:14px;padding-top:12px;border-top:1px dashed var(--line);display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:13px;color:var(--ink3)}
+  .card-foot b{color:var(--ink)}
+  .lvl-row{margin-top:12px;display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ink2)}
+  .lvl-row select{flex:1}
+  /* SESSION BAR */
+  .session-bar{display:flex;border-radius:14px;overflow:hidden;border:1px solid var(--line);margin:16px 0}
+  .seg{padding:16px}
+  .seg-1{flex:3;background:#9A3412;color:white}
+  .seg-2{flex:2;background:#0F766E;color:white}
+  .seg-3{flex:1;background:#1C1917;color:#FDE68A}
+  @media(prefers-color-scheme:dark){.seg-3{background:#E7E5E4;color:#1C1917}}
+  .seg b{font-size:22px;display:block;line-height:1}
+  .seg span{font-size:13px;opacity:.92;display:block;margin-top:4px;line-height:1.4}
+  @media(max-width:640px){.session-bar{flex-direction:column}.seg{flex:none}}
+  .cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:720px){.cols{grid-template-columns:1fr}}
+  .box{background:var(--surface);border:1px solid var(--line2);border-radius:16px;padding:18px;box-shadow:var(--card-shadow)}
+  .box h3{margin:0 0 8px;font-size:19px}
+  .box p,.box li{font-size:14.5px;color:var(--ink2)}
+  .box ul{margin:8px 0 0;padding-left:18px}
+  .box li{margin:5px 0}
+  /* NOTICES */
+  .notice{border-radius:14px;padding:14px 16px;font-size:14.5px;margin-top:20px;border:1px solid var(--line)}
+  .notice b{color:var(--ink)}
+  .notice.warn{background:#FEF3C7;border-color:#FDE68A;color:#92400E}
+  @media(prefers-color-scheme:dark){.notice.warn{background:#451A03;border-color:#92400E;color:#FDE68A}}
+  .notice.err{background:var(--errbg);border-color:var(--err);color:var(--err)}
+  .notice.ok{background:var(--okbg);border-color:var(--ok);color:var(--ok)}
+  .notice.info{background:var(--surface2);color:var(--ink2)}
+  .notice:empty{display:none}
+  /* FORMS + BUTTONS */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:var(--accent);color:#FFF7ED;border:1px solid var(--accent);border-radius:12px;padding:11px 20px;font-size:15px;font-weight:700;cursor:pointer}
+  .btn:hover{filter:brightness(1.07)}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .btn.ghost{background:var(--surface);color:var(--ink);border-color:var(--line)}
+  .btn.teal{background:var(--teal);border-color:var(--teal);color:#F0FDFA}
+  .btn.small{min-height:38px;padding:7px 14px;font-size:14px;border-radius:10px}
+  .field{margin:0 0 14px}
+  .field label{display:block;font-size:13px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--ink3);margin-bottom:6px}
+  input[type=email],input[type=password],input[type=text],input[type=date],select{
+    width:100%;min-height:44px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;
+    background:var(--surface);color:var(--ink);font:inherit;font-size:15px}
+  input:focus,select:focus{outline:2px solid var(--gold);outline-offset:1px}
+  .tabs{display:flex;gap:8px;margin-bottom:18px}
+  .tabs button{flex:1;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:999px;padding:10px 16px;font-weight:600;font-size:14.5px;cursor:pointer}
+  .tabs button.active{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .auth-wrap{max-width:520px}
+  /* APP BAR */
+  .appbar{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;padding:22px 0 4px}
+  .appbar .who{font-size:14.5px;color:var(--ink2)}
+  .appbar .who b{color:var(--ink)}
+  .appbar h2{font-size:26px;margin:0}
+  /* TODAY CARD + LOG FORM */
+  .today-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px}
+  @media(max-width:720px){.today-grid{grid-template-columns:1fr}}
+  .tblock{border:1px solid var(--line2);background:var(--surface2);border-radius:14px;padding:14px 16px}
+  .tblock small{display:block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink3);font-weight:700;margin-bottom:4px}
+  .tblock b{font-size:17px;display:block;line-height:1.3}
+  .tblock span{font-size:13.5px;color:var(--ink2);display:block;margin-top:2px}
+  .check-row{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--line2)}
+  .check-row:last-of-type{border-bottom:none}
+  .check-row input[type=checkbox]{width:22px;height:22px;margin-top:2px;accent-color:var(--accent);flex:none}
+  .check-row .grow{flex:1}
+  .check-row .grow b{font-size:15.5px}
+  .check-row .grow span{display:block;font-size:13.5px;color:var(--ink2)}
+  .check-row select{max-width:240px}
+  @media(max-width:560px){.check-row{flex-wrap:wrap}.check-row select{max-width:none}}
+  .preview{font-size:15px;font-weight:600;margin:14px 0 4px}
+  .bf-btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+  /* RECENT SESSIONS */
+  .timeline{display:grid;gap:10px}
+  .t-row{display:grid;grid-template-columns:110px 1fr auto;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line2);border-radius:14px;padding:12px 16px}
+  @media(max-width:600px){.t-row{grid-template-columns:1fr;gap:4px}}
+  .t-day{font-weight:700;font-size:13px;letter-spacing:.04em}
+  .t-row p{margin:0;font-size:14.5px;color:var(--ink2)}
+  .t-row p b{color:var(--ink)}
+  .tag{font-size:12px;font-weight:700;padding:6px 9px;border-radius:999px;background:var(--surface2);border:1px solid var(--line);white-space:nowrap}
+  .tag.eclipse{background:#FEF3C7;border-color:#FDE68A;color:#92400E}
+  @media(prefers-color-scheme:dark){.tag.eclipse{background:#451A03;color:#FDE68A;border-color:#92400E}}
+  footer{margin-top:44px;padding-top:20px;border-top:1px solid var(--line);display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between;color:var(--ink3);font-size:13.5px}
+  .tamil{font-family:"Noto Sans Tamil",sans-serif} .mal{font-family:"Noto Sans Malayalam",sans-serif} .tel{font-family:"Noto Sans Telugu",sans-serif} .hin{font-family:"Noto Sans Devanagari",sans-serif}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div id="setupNotice" class="notice warn" hidden>
+    <b>Setup pending.</b> This app isn't connected to a database yet — the
+    values in <b>config.js</b> are still placeholders. Follow <b>SETUP.md</b>:
+    create a free Supabase project, run <b>supabase-schema.sql</b>, and paste
+    your Project URL + anon key into config.js. Sign-up and progress tracking
+    switch on as soon as that's done.
+  </div>
+  <div id="fatalNotice" class="notice err" hidden></div>
+
+  <!-- ======================= LANDING (signed out) ======================= -->
+  <div id="landingView">
+    <header class="hero">
+      <div class="hero-top">
+        <span class="pill"><i></i> Nine languages · one league</span>
+        <span class="pill gold"><i></i> 30 minutes a day</span>
+      </div>
+      <h1>Nava Bhasha<br><em>The Nine Tongues League</em></h1>
+      <p class="hero-sub">Nine languages. Nine grahas. <strong>30 minutes a day</strong> — one anchor, two satellites chosen by decay, and a five-minute script sprint. You don't play against anyone else. You play against the Forgetting Curve.</p>
+    </header>
+
+    <div class="orbit">
+      <h3>☉ &nbsp;Tamil is the sun. Everything else orbits it.</h3>
+      <p>Each language sits on the board as a graha — with a level, a points balance, and a decay clock. Rahu and Ketu, the eclipse nodes, hold the two English shadow tracks that sit on top of one language.</p>
+      <div class="orbit-symbols" aria-label="Nine grahas">
+        <span><b>☉</b> Surya · Tamil</span><span><b>☽</b> Chandra · Malayalam</span><span><b>♂</b> Mangala · Telugu</span><span><b>☿</b> Budha · Hindi</span><span><b>♃</b> Guru · German</span><span><b>♀</b> Shukra · Spanish</span><span><b>♄</b> Shani · English US</span><span><b>☊</b> Rahu · English UK</span><span><b>☋</b> Ketu · English Core</span>
+      </div>
+    </div>
+
+    <!-- AUTH -->
+    <section id="join">
+      <div class="sec-head">
+        <div><div class="kicker">Join the league</div><h2>Sign up / log in</h2><p>Create an account to track your levels, points, and streak across all nine tracks. Your board is private — only you can see it.</p></div>
+      </div>
+      <div class="box auth-wrap">
+        <div class="tabs" role="tablist" aria-label="Authentication">
+          <button id="tabLogin" class="active" type="button">Log in</button>
+          <button id="tabSignup" type="button">Sign up</button>
+        </div>
+
+        <form id="loginForm" novalidate>
+          <div class="field"><label for="loginEmail">Email</label><input type="email" id="loginEmail" autocomplete="email" required></div>
+          <div class="field"><label for="loginPassword">Password</label><input type="password" id="loginPassword" autocomplete="current-password" required></div>
+          <button class="btn" type="submit" id="loginBtn">Log in</button>
+        </form>
+
+        <form id="signupForm" hidden novalidate>
+          <div class="field"><label for="signupName">Display name (optional)</label><input type="text" id="signupName" autocomplete="name"></div>
+          <div class="field"><label for="signupEmail">Email</label><input type="email" id="signupEmail" autocomplete="email" required></div>
+          <div class="field"><label for="signupPassword">Password</label><input type="password" id="signupPassword" autocomplete="new-password" required></div>
+          <button class="btn" type="submit" id="signupBtn">Create my board</button>
+          <p style="font-size:13.5px;color:var(--ink3);margin:12px 0 0">Week 1 is placement week: your nine tracks start at Level 0 — Unplaced, and you set each level honestly as you probe it.</p>
+        </form>
+
+        <div id="authMsg" class="notice" hidden></div>
+      </div>
+    </section>
+
+    <!-- NINE TRACKS (static preview) -->
+    <section id="tracks">
+      <div class="sec-head">
+        <div><div class="kicker">The board</div><h2>The nine tracks</h2><p>Every track starts at Level 0 — Unplaced. Week 1 fixes that honestly. “I don't know” is a valid answer all week; a false placement poisons the auction for months.</p></div>
+      </div>
+      <div class="grid" id="landingGrid"></div>
+    </section>
+
+    <!-- HOW A SESSION WORKS -->
+    <section id="how">
+      <div class="sec-head"><div><div class="kicker">Every day</div><h2>One session, three blocks</h2><p>New ground is only ever broken in the anchor. Satellites are chosen by the auction — highest decay debt wins — not by mood. Scripts get their own slot because they decay differently from speech.</p></div></div>
+      <div class="session-bar" role="img" aria-label="Session split: 15 minutes anchor, 10 minutes satellites, 5 minutes script sprint">
+        <div class="seg seg-1"><b>15 min — Anchor</b><span>Deep work on the day's language: lesson, phrase set, listening + shadowing.</span></div>
+        <div class="seg seg-2"><b>10 min — Satellites</b><span>2 × 5 min review drills in two other languages, picked by highest decay debt.</span></div>
+        <div class="seg seg-3"><b>5 min — Script sprint</b><span>Reading + writing only. One script per day.</span></div>
+      </div>
+      <div class="cols">
+        <div class="box"><h3>The week at a glance</h3><ul>
+          <li><b>Mon</b> Hindi · <b>Tue</b> Telugu · <b>Wed</b> Spanish · <b>Thu</b> Malayalam · <b>Fri</b> German · <b>Sat</b> Tamil (formal)</li>
+          <li><b>Sunday</b> reshapes: Boss Fight (10 min, weakest track — win +100, show up +25) → English lab → script sprint</li>
+          <li><b>Script sprint cycle:</b> Tamil → Devanagari → Telugu → Malayalam → repeat</li>
+          <li><b>Points:</b> 10 per study minute, split by block to each language</li>
+        </ul></div>
+        <div class="box"><h3>Eclipse days</h3><p>Some days will be chaos, and life will not ask permission.</p><ul>
+          <li>A declared <b>10-minute minimum</b> (anchor only) keeps the streak alive at reduced points.</li>
+          <li>Declaring an eclipse costs nothing. <b>Skipping silently is the only real loss.</b> Rahu and Ketu approve.</li>
+        </ul></div>
+      </div>
+    </section>
+
+    <footer>
+      <span>Nava Bhasha — The Nine Tongues League</span>
+      <span>30 min a day · If it isn't on the scoreboard, it didn't happen.</span>
+    </footer>
+  </div>
+
+  <!-- ======================= DASHBOARD (signed in) ======================= -->
+  <div id="appView" hidden>
+    <div class="appbar">
+      <div>
+        <h2>Your board</h2>
+        <div class="who">Signed in as <b id="userEmail"></b></div>
+      </div>
+      <button class="btn ghost small" id="signOutBtn" type="button">Sign out</button>
+    </div>
+
+    <div id="dashMsg" class="notice" hidden></div>
+
+    <div class="meta-row" aria-label="Your season">
+      <div class="meta"><small>Total points</small><b id="statPoints">—</b><span>Across all nine tracks</span></div>
+      <div class="meta"><small>Current streak</small><b id="statStreak">—</b><span>Eclipse days count</span></div>
+      <div class="meta"><small>Sessions logged</small><b id="statSessions">—</b><span>Goal: 75+ in 90 days</span></div>
+      <div class="meta"><small>Today</small><b id="statToday">—</b><span id="statTodaySub">—</span></div>
+    </div>
+
+    <div id="placementBanner" class="notice info" hidden>
+      <b>Week 1 — Placement mode.</b> You haven't logged a session yet, so all
+      nine tracks sit at Level 0 — Unplaced. Probe each language honestly this
+      week and set its level from the track cards below (0–5). “I don't know”
+      is a valid answer — a false placement poisons the auction for months.
+    </div>
+
+    <!-- TODAY'S SESSION CARD -->
+    <section id="todaySection">
+      <div class="sec-head"><div><div class="kicker">Today's session card</div><h2 id="todayTitle">Today</h2><p>The anchor follows the weekly rotation. Satellites below are the auction's pick — the two tracks with the highest decay debt right now.</p></div></div>
+      <div class="box">
+        <div class="today-grid">
+          <div class="tblock"><small>Anchor · 15 min</small><b id="todayAnchor">—</b><span id="todayAnchorNote">—</span></div>
+          <div class="tblock"><small>Satellites · 2 × 5 min</small><b id="todaySats">—</b><span>Highest decay debt, anchor excluded</span></div>
+          <div class="tblock"><small>Script sprint · 5 min</small><b id="todayScript">—</b><span id="todayScriptNote">—</span></div>
+        </div>
+        <p id="todayBossNote" style="margin:14px 0 0;font-size:14.5px;color:var(--ink2)" hidden>⚔️ <b>Sunday:</b> the session opens with a Boss Fight in the week's weakest track. Record it in the Boss Fight card below.</p>
+      </div>
+    </section>
+
+    <!-- LOG SESSION -->
+    <section id="logSection">
+      <div class="sec-head"><div><div class="kicker">Keep the scoreboard honest</div><h2>Log a session</h2><p>Tick what you actually did. Points are automatic: 10 per minute, split by block to each language.</p></div></div>
+      <form class="box" id="logForm">
+        <div class="field" style="max-width:240px"><label for="fDate">Session date</label><input type="date" id="fDate"></div>
+
+        <div class="check-row">
+          <input type="checkbox" id="fAnchorDone">
+          <div class="grow"><b>Anchor — <span id="fAnchorMins">15</span> min</b><span>Deep work on one language. New ground is only broken here.</span></div>
+          <select id="fAnchorTrack" aria-label="Anchor language"></select>
+        </div>
+
+        <div id="normalBlocks">
+          <div class="check-row">
+            <input type="checkbox" id="fSat1Done">
+            <div class="grow"><b>Satellite 1 — 5 min</b><span>Review drill. Pre-filled with the auction's pick.</span></div>
+            <select id="fSat1Track" aria-label="Satellite 1 language"></select>
+          </div>
+          <div class="check-row">
+            <input type="checkbox" id="fSat2Done">
+            <div class="grow"><b>Satellite 2 — 5 min</b><span>Review drill. Pre-filled with the auction's pick.</span></div>
+            <select id="fSat2Track" aria-label="Satellite 2 language"></select>
+          </div>
+          <div class="check-row">
+            <input type="checkbox" id="fScriptDone">
+            <div class="grow"><b>Script sprint — 5 min</b><span>Reading + writing only. Points go to the script's language.</span></div>
+            <select id="fScript" aria-label="Script sprint script"></select>
+          </div>
+        </div>
+
+        <div class="check-row">
+          <input type="checkbox" id="fEclipse">
+          <div class="grow"><b>🌒 Eclipse day</b><span>Chaos day? A 10-minute anchor-only minimum. Keeps the streak alive at reduced points — declaring costs nothing.</span></div>
+        </div>
+
+        <p class="preview" id="pointsPreview">Tick a block to preview points.</p>
+        <button class="btn" type="submit" id="saveSessionBtn">Save session</button>
+        <div id="logMsg" class="notice" hidden></div>
+      </form>
+    </section>
+
+    <!-- BOSS FIGHT -->
+    <section id="bossSection">
+      <div class="sec-head"><div><div class="kicker">Sunday · Weakest-link test</div><h2>Boss Fight</h2><p>Ten minutes in the week's weakest track. The adversary picks the battlefield — shore up the weakest link before Sunday exposes it.</p></div></div>
+      <div class="box">
+        <div class="field" style="max-width:320px"><label for="bfTrack">Boss Fight track</label><select id="bfTrack"></select></div>
+        <p style="font-size:14.5px;color:var(--ink2);margin:0">Pre-filled with your weakest track (lowest level, then highest decay). Win = level-appropriate performance, graded honestly.</p>
+        <div class="bf-btns">
+          <button class="btn teal" type="button" id="bfWinBtn">⚔️ Won it · +100</button>
+          <button class="btn ghost" type="button" id="bfShowBtn">Showed up · +25</button>
+        </div>
+        <div id="bfMsg" class="notice" hidden></div>
+      </div>
+    </section>
+
+    <!-- TRACKS -->
+    <section id="myTracks">
+      <div class="sec-head">
+        <div><div class="kicker">The board</div><h2>Your nine tracks</h2><p>Levels, points, and decay — straight from your scoreboard. Set a track's level whenever a placement probe or a level-up check earns it.</p></div>
+      </div>
+      <div class="grid" id="dashGrid"></div>
+    </section>
+
+    <!-- RECENT SESSIONS -->
+    <section id="recentSection">
+      <div class="sec-head"><div><div class="kicker">The record</div><h2>Recent sessions</h2><p>If it isn't on the scoreboard, it didn't happen.</p></div></div>
+      <div class="timeline" id="recentList"></div>
+    </section>
+
+    <footer>
+      <span>Nava Bhasha — The Nine Tongues League</span>
+      <span>30 min a day · Play against the Forgetting Curve.</span>
+    </footer>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+(function(){
+'use strict';
+
+/* ---------------- Data ---------------- */
+var TRACKS = [
+  { id:'tamil',        name:'Tamil',          graha:'Surya',   symbol:'☉', color:'#D97706', greeting:'வணக்கம்',      gclass:'tamil', anchorDay:'Saturday',    blurb:'Formal register + reading / writing fluency. Your mother tongue is the sun; Saturday is formal day — spoken Tamil doesn\u2019t count toward this level.' },
+  { id:'malayalam',    name:'Malayalam',      graha:'Chandra', symbol:'☽', color:'#64748B', greeting:'നമസ്കാരം',    gclass:'mal',   anchorDay:'Thursday',    blurb:'Closest kin to Tamil. Script + conversation — kinship and home words first.' },
+  { id:'telugu',       name:'Telugu',         graha:'Mangala', symbol:'♂', color:'#DC2626', greeting:'నమస్కారం',     gclass:'tel',   anchorDay:'Tuesday',     blurb:'Script + conversation. Script recognition, greetings, and listening, one snippet at a time.' },
+  { id:'hindi',        name:'Hindi',          graha:'Budha',   symbol:'☿', color:'#059669', greeting:'नमस्ते',        gclass:'hin',   anchorDay:'Monday',      blurb:'The link language. Devanagari + conversation.' },
+  { id:'german',       name:'German',         graha:'Guru',    symbol:'♃', color:'#CA8A04', greeting:'Guten Tag',    gclass:'',      anchorDay:'Friday',      blurb:'The structured learner\u2019s language. Grammar discipline pays here.' },
+  { id:'spanish',      name:'Spanish',        graha:'Shukra',  symbol:'♀', color:'#DB2777', greeting:'Buenos días',  gclass:'',      anchorDay:'Wednesday',   blurb:'Travel-first: directions, food, transport, money, small problems — handled without a phone.' },
+  { id:'english_us',   name:'English (US)',   graha:'Shani',   symbol:'♄', color:'#1E3A5F', greeting:'Howdy',        gclass:'',      anchorDay:'Sunday lab',  blurb:'Your Texas everyday: workplace idiom, small talk, local register. Slow, daily — and it compounds.' },
+  { id:'english_uk',   name:'English (UK)',   graha:'Rahu',    symbol:'☊', color:'#475569', greeting:'Good morning', gclass:'',      anchorDay:'Sunday lab',  blurb:'The shadow pair, part one: British idiom, spelling, dry register. The sitcoms count as listening practice.' },
+  { id:'english_core', name:'English — Core', graha:'Ketu',    symbol:'☋', color:'#78716C', greeting:'Precision',    gclass:'',      anchorDay:'Sunday lab',  blurb:'The shared trunk under US / UK: precision grammar, vocabulary depth, writing.' }
+];
+var TRACK_BY_ID = {};
+TRACKS.forEach(function(t){ TRACK_BY_ID[t.id] = t; });
+
+var LEVEL_NAMES = ['Unplaced','Survival','Travel-ready','Conversational','Fluent reader','Mastery track'];
+
+/* Script sprint cycle (plan order). Index = (dayNumber + 3) % 4 — phased so
+   Wed Nov 18, 2026 = Telugu, matching the league's published Week 1. */
+var SCRIPTS = [
+  { name:'Tamil',      track:'tamil' },
+  { name:'Devanagari', track:'hindi' },
+  { name:'Telugu',     track:'telugu' },
+  { name:'Malayalam',  track:'malayalam' }
+];
+var SCRIPT_BY_NAME = {};
+SCRIPTS.forEach(function(s){ SCRIPT_BY_NAME[s.name] = s; });
+
+/* Anchor by JS getDay() (0 = Sunday). Sunday is handled specially. */
+var ANCHOR_BY_DOW = { 1:'hindi', 2:'telugu', 3:'spanish', 4:'malayalam', 5:'german', 6:'tamil' };
+var ENGLISH_ROTATION = ['english_us', 'english_uk', 'english_core'];
+var DAY_NAMES = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+/* ---------------- Helpers ---------------- */
+function $(id){ return document.getElementById(id); }
+function pad2(n){ return (n < 10 ? '0' : '') + n; }
+function fmtDate(d){ return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate()); }
+function todayStr(){ return fmtDate(new Date()); }
+function parseDateStr(s){ var p = s.split('-'); return { y:+p[0], m:+p[1], d:+p[2] }; }
+function dayNumber(s){ var p = parseDateStr(s); return Math.floor(Date.UTC(p.y, p.m - 1, p.d) / 86400000); }
+function dowOf(s){ var p = parseDateStr(s); return new Date(Date.UTC(p.y, p.m - 1, p.d)).getUTCDay(); }
+function scriptForDate(s){ return SCRIPTS[(dayNumber(s) + 3) % 4]; }
+function anchorForDate(s){
+  var dow = dowOf(s);
+  if (dow === 0){
+    var idx = Math.floor(dayNumber(s) / 7) % 3;
+    return { track: ENGLISH_ROTATION[idx], sunday: true };
+  }
+  return { track: ANCHOR_BY_DOW[dow], sunday: false };
+}
+function daysSince(dateStr, fromStr){
+  if (!dateStr) return Infinity;
+  return dayNumber(fromStr) - dayNumber(dateStr);
+}
+function esc(s){
+  return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+    return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c];
+  });
+}
+function showMsg(el, text, kind){
+  el.hidden = false;
+  el.className = 'notice' + (kind ? ' ' + kind : '');
+  el.textContent = text;
+}
+function hideMsg(el){ el.hidden = true; el.textContent = ''; }
+
+/* ---------------- Config / client ---------------- */
+var cfg = window.NAVA_CONFIG || {};
+var configured = !!(
+  cfg.SUPABASE_URL && cfg.SUPABASE_URL.indexOf('YOUR_') !== 0 &&
+  cfg.SUPABASE_ANON_KEY && cfg.SUPABASE_ANON_KEY.indexOf('YOUR_') !== 0
+);
+var sb = null;
+if (!configured){
+  $('setupNotice').hidden = false;
+  ['loginBtn','signupBtn'].forEach(function(id){ $(id).disabled = true; });
+} else if (!window.supabase){
+  showMsg($('fatalNotice'), 'The Supabase library could not be loaded — check your connection and reload the page.', 'err');
+  $('fatalNotice').hidden = false;
+} else {
+  sb = window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY);
+}
+
+/* ---------------- State ---------------- */
+var state = {
+  user: null,
+  progress: {},   // track id -> track_progress row
+  sessions: [],   // session rows, newest first
+  loadedFor: null // user id the dashboard was loaded for
+};
+
+/* ---------------- Static landing grid ---------------- */
+function trackCardHTML(t, inner){
+  return '<article class="card" style="--c:' + t.color + '">'
+    + '<div class="card-top"><div class="sym">' + t.symbol + '</div>' + inner.badge + '</div>'
+    + '<h3><span>' + t.graha + '</span>' + esc(t.name) + '</h3>'
+    + '<div class="native ' + t.gclass + '">' + esc(t.greeting) + '</div>'
+    + '<p>' + esc(t.blurb) + '</p>'
+    + inner.foot
+    + '</article>';
+}
+function renderLandingGrid(){
+  $('landingGrid').innerHTML = TRACKS.map(function(t){
+    return trackCardHTML(t, {
+      badge: '<span class="level">Level 0 · Unplaced</span>',
+      foot: '<div class="card-foot"><span>Anchor: <b>' + t.anchorDay + '</b></span><span>0 pts</span></div>'
+    });
+  }).join('');
+}
+renderLandingGrid();
+
+/* ---------------- Auth UI ---------------- */
+var tabLogin = $('tabLogin'), tabSignup = $('tabSignup');
+function showAuthTab(which){
+  var login = which === 'login';
+  tabLogin.classList.toggle('active', login);
+  tabSignup.classList.toggle('active', !login);
+  $('loginForm').hidden = !login;
+  $('signupForm').hidden = login;
+  hideMsg($('authMsg'));
+}
+tabLogin.addEventListener('click', function(){ showAuthTab('login'); });
+tabSignup.addEventListener('click', function(){ showAuthTab('signup'); });
+
+$('loginForm').addEventListener('submit', function(ev){
+  ev.preventDefault();
+  if (!sb) return;
+  var btn = $('loginBtn'); btn.disabled = true;
+  hideMsg($('authMsg'));
+  sb.auth.signInWithPassword({
+    email: $('loginEmail').value.trim(),
+    password: $('loginPassword').value
+  }).then(function(res){
+    btn.disabled = false;
+    if (res.error) showMsg($('authMsg'), res.error.message, 'err');
+    /* success: onAuthStateChange swaps the view */
+  });
+});
+
+$('signupForm').addEventListener('submit', function(ev){
+  ev.preventDefault();
+  if (!sb) return;
+  var btn = $('signupBtn'); btn.disabled = true;
+  hideMsg($('authMsg'));
+  var name = $('signupName').value.trim();
+  sb.auth.signUp({
+    email: $('signupEmail').value.trim(),
+    password: $('signupPassword').value,
+    options: { data: { display_name: name } }
+  }).then(function(res){
+    btn.disabled = false;
+    if (res.error){ showMsg($('authMsg'), res.error.message, 'err'); return; }
+    if (!res.data.session){
+      showMsg($('authMsg'), 'Account created — check your email and click the confirmation link, then log in. (The link only works if the Site URL is set in Supabase — see SETUP.md, Step 5.)', 'ok');
+      showAuthTab('login');
+    }
+    /* if a session came back, onAuthStateChange swaps the view */
+  });
+});
+
+$('signOutBtn').addEventListener('click', function(){
+  if (!sb) return;
+  sb.auth.signOut();
+});
+
+/* ---------------- Session handling ---------------- */
+function handleSession(session){
+  if (session && session.user){
+    state.user = session.user;
+    $('landingView').hidden = true;
+    $('appView').hidden = false;
+    $('userEmail').textContent = session.user.email || '';
+    if (state.loadedFor !== session.user.id){
+      state.loadedFor = session.user.id;
+      loadDashboard();
+    }
+  } else {
+    state.user = null;
+    state.loadedFor = null;
+    state.progress = {};
+    state.sessions = [];
+    $('appView').hidden = true;
+    $('landingView').hidden = false;
+  }
+}
+if (sb){
+  sb.auth.getSession().then(function(res){ handleSession(res.data.session); });
+  sb.auth.onAuthStateChange(function(_event, session){ handleSession(session); });
+}
+
+/* ---------------- Dashboard data ---------------- */
+async function loadDashboard(){
+  hideMsg($('dashMsg'));
+  try {
+    var uid = state.user.id;
+
+    /* Profile (the signup trigger normally creates it; backfill if missing) */
+    var prof = await sb.from('profiles').select('id').eq('id', uid).maybeSingle();
+    if (prof.error) throw prof.error;
+    if (!prof.data){
+      var ins = await sb.from('profiles').insert({
+        id: uid,
+        display_name: (state.user.email || 'player').split('@')[0]
+      });
+      if (ins.error) throw ins.error;
+    }
+
+    /* Track progress — lazily create any missing of the nine rows */
+    var tp = await sb.from('track_progress').select('*').eq('user_id', uid);
+    if (tp.error) throw tp.error;
+    var rows = tp.data || [];
+    var have = {};
+    rows.forEach(function(r){ have[r.track] = true; });
+    var missing = TRACKS.filter(function(t){ return !have[t.id]; });
+    if (missing.length){
+      var insRows = missing.map(function(t){ return { user_id: uid, track: t.id }; });
+      var insTp = await sb.from('track_progress').insert(insRows);
+      if (insTp.error) throw insTp.error;
+      var tp2 = await sb.from('track_progress').select('*').eq('user_id', uid);
+      if (tp2.error) throw tp2.error;
+      rows = tp2.data || [];
+    }
+    state.progress = {};
+    rows.forEach(function(r){ state.progress[r.track] = r; });
+
+    /* Sessions, newest first */
+    var ss = await sb.from('sessions').select('*').eq('user_id', uid)
+      .order('session_date', { ascending: false })
+      .order('created_at', { ascending: false });
+    if (ss.error) throw ss.error;
+    state.sessions = ss.data || [];
+
+    renderDashboard();
+  } catch (err) {
+    showMsg($('dashMsg'), 'Could not load your board: ' + (err.message || err), 'err');
+  }
+}
+
+function totalPoints(){
+  var sum = 0;
+  TRACKS.forEach(function(t){
+    var r = state.progress[t.id];
+    if (r) sum += r.points || 0;
+  });
+  return sum;
+}
+function computeStreak(){
+  var seen = {};
+  state.sessions.forEach(function(s){ seen[s.session_date] = true; });
+  var d = new Date();
+  if (!seen[fmtDate(d)]){
+    d.setDate(d.getDate() - 1);
+    if (!seen[fmtDate(d)]) return 0;
+  }
+  var streak = 0;
+  while (seen[fmtDate(d)]){
+    streak++;
+    d.setDate(d.getDate() - 1);
+  }
+  return streak;
+}
+/* Auction: tracks sorted by decay debt (days since last practiced,
+   never-practiced = infinite), tie-break lower level first. */
+function auctionOrder(excludeId){
+  var t = todayStr();
+  return TRACKS
+    .filter(function(tr){ return tr.id !== excludeId; })
+    .slice()
+    .sort(function(a, b){
+      var ra = state.progress[a.id] || { level: 0, last_practiced: null };
+      var rb = state.progress[b.id] || { level: 0, last_practiced: null };
+      var da = daysSince(ra.last_practiced, t);
+      var db = daysSince(rb.last_practiced, t);
+      if (db !== da) return db - da;
+      return (ra.level || 0) - (rb.level || 0);
+    });
+}
+function weakestTrack(){
+  var order = auctionOrder(null).slice().sort(function(a, b){
+    var ra = state.progress[a.id] || { level: 0, last_practiced: null };
+    var rb = state.progress[b.id] || { level: 0, last_practiced: null };
+    if ((ra.level || 0) !== (rb.level || 0)) return (ra.level || 0) - (rb.level || 0);
+    return daysSince(rb.last_practiced, todayStr()) - daysSince(ra.last_practiced, todayStr());
+  });
+  return order[0];
+}
+
+/* ---------------- Dashboard rendering ---------------- */
+function renderDashboard(){
+  var t = todayStr();
+  var anchor = anchorForDate(t);
+  var anchorTrack = TRACK_BY_ID[anchor.track];
+
+  $('statPoints').textContent = totalPoints() + ' pts';
+  var streak = computeStreak();
+  $('statStreak').textContent = streak + (streak === 1 ? ' day' : ' days');
+  $('statSessions').textContent = String(state.sessions.length);
+  $('statToday').textContent = DAY_NAMES[dowOf(t)];
+  $('statTodaySub').textContent = 'Anchor: ' + anchorTrack.name + (anchor.sunday ? ' (English lab)' : '');
+
+  $('placementBanner').hidden = state.sessions.length > 0;
+
+  /* Today's session card */
+  var sats = auctionOrder(anchor.track).slice(0, 2);
+  $('todayTitle').textContent = DAY_NAMES[dowOf(t)] + ' — ' + anchorTrack.name + (anchor.sunday ? ' lab' : ' anchor');
+  $('todayAnchor').textContent = anchorTrack.graha + ' ' + anchorTrack.symbol + ' · ' + anchorTrack.name;
+  $('todayAnchorNote').textContent = anchor.sunday
+    ? 'English lab — US / UK / Core rotate weekly. Boss Fight first.'
+    : anchorTrack.blurb;
+  $('todaySats').textContent = sats.map(function(s){ return s.name; }).join('  ·  ');
+  var script = scriptForDate(t);
+  $('todayScript').textContent = script.name;
+  $('todayScriptNote').textContent = 'Points go to ' + TRACK_BY_ID[script.track].name + '. Cycle: Tamil → Devanagari → Telugu → Malayalam.';
+  $('todayBossNote').hidden = !anchor.sunday;
+
+  renderDashGrid();
+  renderRecent();
+  prefillLogForm($('fDate').value || t);
+  prefillBossFight();
+}
+
+function renderDashGrid(){
+  var t = todayStr();
+  $('dashGrid').innerHTML = TRACKS.map(function(tr){
+    var r = state.progress[tr.id] || { level: 0, points: 0, last_practiced: null };
+    var decay = r.last_practiced ? daysSince(r.last_practiced, t) : null;
+    var opts = '';
+    for (var lv = 0; lv <= 5; lv++){
+      opts += '<option value="' + lv + '"' + (lv === (r.level || 0) ? ' selected' : '') + '>'
+        + lv + ' — ' + LEVEL_NAMES[lv] + '</option>';
+    }
+    var foot = '<div class="card-foot"><span>Anchor: <b>' + tr.anchorDay + '</b></span>'
+      + '<span><b>' + (r.points || 0) + ' pts</b></span>'
+      + '<span>' + (r.last_practiced
+          ? 'Last: ' + r.last_practiced + ' · decay ' + decay + 'd'
+          : 'Not practiced yet') + '</span></div>'
+      + '<div class="lvl-row"><label for="lvl-' + tr.id + '">Level</label>'
+      + '<select id="lvl-' + tr.id + '" data-track="' + tr.id + '">' + opts + '</select></div>';
+    return trackCardHTML(tr, {
+      badge: '<span class="level">Level ' + (r.level || 0) + ' · ' + LEVEL_NAMES[r.level || 0] + '</span>',
+      foot: foot
+    });
+  }).join('');
+
+  /* Level selects (placement + level-ups) */
+  TRACKS.forEach(function(tr){
+    $('lvl-' + tr.id).addEventListener('change', function(ev){
+      setTrackLevel(tr.id, parseInt(ev.target.value, 10));
+    });
+  });
+}
+
+async function setTrackLevel(trackId, level){
+  if (!sb || !state.user) return;
+  var res = await sb.from('track_progress')
+    .update({ level: level })
+    .eq('user_id', state.user.id)
+    .eq('track', trackId);
+  if (res.error){
+    showMsg($('dashMsg'), 'Could not save that level: ' + res.error.message, 'err');
+    return;
+  }
+  if (state.progress[trackId]) state.progress[trackId].level = level;
+  hideMsg($('dashMsg'));
+  renderDashGrid();
+  prefillBossFight();
+}
+
+function sessionSummary(s){
+  if (s.boss_fight){
+    return '<b>Boss Fight</b> — ' + esc(TRACK_BY_ID[s.anchor_track] ? TRACK_BY_ID[s.anchor_track].name : (s.anchor_track || ''))
+      + (s.boss_fight === 'win' ? ' · won' : ' · showed up');
+  }
+  var parts = [];
+  if (s.anchor_track && TRACK_BY_ID[s.anchor_track]) parts.push('<b>Anchor:</b> ' + esc(TRACK_BY_ID[s.anchor_track].name));
+  if (s.satellite_tracks && s.satellite_tracks.length){
+    parts.push('Satellites: ' + s.satellite_tracks.map(function(id){
+      return esc(TRACK_BY_ID[id] ? TRACK_BY_ID[id].name : id);
+    }).join(', '));
+  }
+  if (s.script) parts.push('Script: ' + esc(s.script));
+  return parts.join(' · ') || 'Session';
+}
+function renderRecent(){
+  var box = $('recentList');
+  if (!state.sessions.length){
+    box.innerHTML = '<div class="t-row"><p>No sessions logged yet. Your first one starts the streak.</p></div>';
+    return;
+  }
+  box.innerHTML = state.sessions.slice(0, 8).map(function(s){
+    return '<div class="t-row"><div class="t-day">' + esc(s.session_date) + '</div>'
+      + '<p>' + sessionSummary(s) + ' · ' + s.minutes + ' min</p>'
+      + (s.eclipse
+          ? '<span class="tag eclipse">🌒 Eclipse</span>'
+          : '<span class="tag">+' + s.points + ' pts</span>')
+      + '</div>';
+  }).join('');
+}
+
+/* ---------------- Log-session form ---------------- */
+function fillTrackSelect(sel, selectedId){
+  sel.innerHTML = TRACKS.map(function(t){
+    return '<option value="' + t.id + '"' + (t.id === selectedId ? ' selected' : '') + '>'
+      + t.name + '</option>';
+  }).join('');
+}
+function prefillLogForm(dateStr){
+  var anchor = anchorForDate(dateStr);
+  fillTrackSelect($('fAnchorTrack'), anchor.track);
+  var sats = auctionOrder(anchor.track).slice(0, 2);
+  fillTrackSelect($('fSat1Track'), sats[0] ? sats[0].id : 'hindi');
+  fillTrackSelect($('fSat2Track'), sats[1] ? sats[1].id : 'telugu');
+  var script = scriptForDate(dateStr);
+  $('fScript').innerHTML = SCRIPTS.map(function(s){
+    return '<option value="' + s.name + '"' + (s.name === script.name ? ' selected' : '') + '>'
+      + s.name + ' → ' + TRACK_BY_ID[s.track].name + '</option>';
+  }).join('');
+  updatePreview();
+}
+function computeSession(){
+  var eclipse = $('fEclipse').checked;
+  var per = {};   /* track id -> points earned */
+  var minutes = 0;
+  var satsDone = [];
+  var scriptName = null;
+  var anchorDone = $('fAnchorDone').checked;
+  var anchorTrack = $('fAnchorTrack').value;
+
+  function add(track, pts){ per[track] = (per[track] || 0) + pts; }
+
+  if (eclipse){
+    if (anchorDone){ add(anchorTrack, 100); minutes += 10; }
+  } else {
+    if (anchorDone){ add(anchorTrack, 150); minutes += 15; }
+    if ($('fSat1Done').checked){ add($('fSat1Track').value, 50); minutes += 5; satsDone.push($('fSat1Track').value); }
+    if ($('fSat2Done').checked){ add($('fSat2Track').value, 50); minutes += 5; satsDone.push($('fSat2Track').value); }
+    if ($('fScriptDone').checked){
+      var sc = SCRIPT_BY_NAME[$('fScript').value];
+      add(sc.track, 50); minutes += 5; scriptName = sc.name;
+    }
+  }
+  var points = 0;
+  Object.keys(per).forEach(function(k){ points += per[k]; });
+  return {
+    eclipse: eclipse, per: per, minutes: minutes, points: points,
+    anchorTrack: anchorDone ? anchorTrack : null,
+    satelliteTracks: satsDone, script: scriptName
+  };
+}
+function updatePreview(){
+  var c = computeSession();
+  var el = $('pointsPreview');
+  if (c.minutes === 0){
+    el.textContent = 'Tick a block to preview points.';
+    return;
+  }
+  var bits = Object.keys(c.per).map(function(k){
+    return TRACK_BY_ID[k].name + ' +' + c.per[k];
+  });
+  el.textContent = 'This session: ' + c.minutes + ' min · ' + c.points + ' pts (' + bits.join(' · ') + ')';
+}
+['fAnchorDone','fSat1Done','fSat2Done','fScriptDone','fEclipse',
+ 'fAnchorTrack','fSat1Track','fSat2Track','fScript'].forEach(function(id){
+  $(id).addEventListener('change', function(){
+    if (id === 'fEclipse'){
+      var on = $('fEclipse').checked;
+      $('normalBlocks').style.opacity = on ? '.45' : '1';
+      $('fAnchorMins').textContent = on ? '10' : '15';
+    }
+    updatePreview();
+  });
+});
+$('fDate').value = todayStr();
+$('fDate').addEventListener('change', function(){
+  if ($('fDate').value) prefillLogForm($('fDate').value);
+});
+
+async function applyTrackPoints(per, dateStr){
+  var tracks = Object.keys(per);
+  for (var i = 0; i < tracks.length; i++){
+    var tid = tracks[i];
+    var cur = state.progress[tid] || { points: 0 };
+    var res = await sb.from('track_progress')
+      .update({ points: (cur.points || 0) + per[tid], last_practiced: dateStr })
+      .eq('user_id', state.user.id)
+      .eq('track', tid);
+    if (res.error) throw res.error;
+    if (state.progress[tid]){
+      state.progress[tid].points = (cur.points || 0) + per[tid];
+      state.progress[tid].last_practiced = dateStr;
+    }
+  }
+}
+
+$('logForm').addEventListener('submit', async function(ev){
+  ev.preventDefault();
+  if (!sb || !state.user) return;
+  hideMsg($('logMsg'));
+  var dateStr = $('fDate').value || todayStr();
+  var c = computeSession();
+  if (c.minutes === 0){
+    showMsg($('logMsg'), 'Tick at least one block — an honest zero is a skip, and skips don\u2019t get logged.', 'err');
+    return;
+  }
+  var btn = $('saveSessionBtn'); btn.disabled = true;
+  try {
+    var ins = await sb.from('sessions').insert({
+      user_id: state.user.id,
+      session_date: dateStr,
+      anchor_track: c.anchorTrack,
+      satellite_tracks: c.satelliteTracks,
+      script: c.script,
+      minutes: c.minutes,
+      points: c.points,
+      eclipse: c.eclipse,
+      boss_fight: null
+    }).select().single();
+    if (ins.error) throw ins.error;
+    await applyTrackPoints(c.per, dateStr);
+    state.sessions.unshift(ins.data);
+    state.sessions.sort(function(a, b){
+      if (a.session_date !== b.session_date) return a.session_date < b.session_date ? 1 : -1;
+      return a.created_at < b.created_at ? 1 : -1;
+    });
+    ['fAnchorDone','fSat1Done','fSat2Done','fScriptDone','fEclipse'].forEach(function(id){ $(id).checked = false; });
+    $('normalBlocks').style.opacity = '1';
+    $('fAnchorMins').textContent = '15';
+    showMsg($('logMsg'), 'Logged: ' + c.minutes + ' min, +' + c.points + ' pts' + (c.eclipse ? ' — eclipse day, streak safe 🌒' : '') + '. The scoreboard remembers.', 'ok');
+    renderDashboard();
+  } catch (err) {
+    showMsg($('logMsg'), 'Could not save: ' + (err.message || err), 'err');
+  }
+  btn.disabled = false;
+});
+
+/* ---------------- Boss fight ---------------- */
+function prefillBossFight(){
+  var w = weakestTrack();
+  fillTrackSelect($('bfTrack'), w ? w.id : 'spanish');
+}
+async function recordBossFight(result){
+  if (!sb || !state.user) return;
+  hideMsg($('bfMsg'));
+  var trackId = $('bfTrack').value;
+  var pts = result === 'win' ? 100 : 25;
+  var dateStr = todayStr();
+  try {
+    var ins = await sb.from('sessions').insert({
+      user_id: state.user.id,
+      session_date: dateStr,
+      anchor_track: trackId,
+      satellite_tracks: [],
+      script: null,
+      minutes: 10,
+      points: pts,
+      eclipse: false,
+      boss_fight: result
+    }).select().single();
+    if (ins.error) throw ins.error;
+    var per = {}; per[trackId] = pts;
+    await applyTrackPoints(per, dateStr);
+    state.sessions.unshift(ins.data);
+    showMsg($('bfMsg'), result === 'win'
+      ? '⚔️ Boss Fight won — +' + pts + ' pts to ' + TRACK_BY_ID[trackId].name + '. Check whether that earns a level-up on the track card.'
+      : 'Recorded — +' + pts + ' pts to ' + TRACK_BY_ID[trackId].name + ' for showing up. The rematch writes itself into next week\u2019s satellites.', 'ok');
+    renderDashboard();
+  } catch (err) {
+    showMsg($('bfMsg'), 'Could not save: ' + (err.message || err), 'err');
+  }
+}
+$('bfWinBtn').addEventListener('click', function(){ recordBossFight('win'); });
+$('bfShowBtn').addEventListener('click', function(){ recordBossFight('showed_up'); });
+
+})();
+</script>
+</body>
+</html>

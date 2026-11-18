@@ -9,3 +9,7 @@ Nine language tracks mapped to the nine grahas — Tamil (Surya), Malayalam (Cha
 - `state.md` — the live scoreboard (levels, points, streak); if it isn't written there, it didn't happen
 
 League starts Wednesday, November 18, 2026. Daily session card at 8:15 PM CT.
+
+## The app
+
+`app/` holds the public web app — signup/login (Supabase Auth), personal dashboards, session logging, streaks, and boss fights. See `app/SETUP.md` for the one-time setup (Supabase project + GitHub Pages).
