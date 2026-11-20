@@ -574,32 +574,15 @@ async function loadDashboard(){
   try {
     var uid = state.user.id;
 
-    /* Profile (the signup trigger normally creates it; backfill if missing) */
-    var prof = await sb.from('profiles').select('id').eq('id', uid).maybeSingle();
-    if (prof.error) throw prof.error;
-    if (!prof.data){
-      var ins = await sb.from('profiles').insert({
-        id: uid,
-        display_name: (state.user.email || 'player').split('@')[0]
-      });
-      if (ins.error) throw ins.error;
-    }
+    /* Profile + nine track rows are created by the signup trigger;
+       ensure_my_profile() backfills them if anything is missing.
+       (Clients can no longer insert into these tables directly.) */
+    var ens = await sb.rpc('ensure_my_profile');
+    if (ens.error) throw ens.error;
 
-    /* Track progress — lazily create any missing of the nine rows */
     var tp = await sb.from('track_progress').select('*').eq('user_id', uid);
     if (tp.error) throw tp.error;
     var rows = tp.data || [];
-    var have = {};
-    rows.forEach(function(r){ have[r.track] = true; });
-    var missing = TRACKS.filter(function(t){ return !have[t.id]; });
-    if (missing.length){
-      var insRows = missing.map(function(t){ return { user_id: uid, track: t.id }; });
-      var insTp = await sb.from('track_progress').insert(insRows);
-      if (insTp.error) throw insTp.error;
-      var tp2 = await sb.from('track_progress').select('*').eq('user_id', uid);
-      if (tp2.error) throw tp2.error;
-      rows = tp2.data || [];
-    }
     state.progress = {};
     rows.forEach(function(r){ state.progress[r.track] = r; });
 
@@ -732,10 +715,7 @@ function renderDashGrid(){
 
 async function setTrackLevel(trackId, level){
   if (!sb || !state.user) return;
-  var res = await sb.from('track_progress')
-    .update({ level: level })
-    .eq('user_id', state.user.id)
-    .eq('track', trackId);
+  var res = await sb.rpc('set_track_level', { p_track: trackId, p_level: level });
   if (res.error){
     showMsg($('dashMsg'), 'Could not save that level: ' + res.error.message, 'err');
     return;
@@ -842,6 +822,7 @@ function updatePreview(){
 ['fAnchorDone','fSat1Done','fSat2Done','fScriptDone','fEclipse',
  'fAnchorTrack','fSat1Track','fSat2Track','fScript'].forEach(function(id){
   $(id).addEventListener('change', function(){
+    pendingRequestId = null;
     if (id === 'fEclipse'){
       var on = $('fEclipse').checked;
       $('normalBlocks').style.opacity = on ? '.45' : '1';
@@ -852,24 +833,35 @@ function updatePreview(){
 });
 $('fDate').value = todayStr();
 $('fDate').addEventListener('change', function(){
+  pendingRequestId = null;
   if ($('fDate').value) prefillLogForm($('fDate').value);
 });
 
-async function applyTrackPoints(per, dateStr){
-  var tracks = Object.keys(per);
-  for (var i = 0; i < tracks.length; i++){
-    var tid = tracks[i];
-    var cur = state.progress[tid] || { points: 0 };
-    var res = await sb.from('track_progress')
-      .update({ points: (cur.points || 0) + per[tid], last_practiced: dateStr })
-      .eq('user_id', state.user.id)
-      .eq('track', tid);
-    if (res.error) throw res.error;
-    if (state.progress[tid]){
-      state.progress[tid].points = (cur.points || 0) + per[tid];
-      state.progress[tid].last_practiced = dateStr;
-    }
+/* Track totals are written by the database (record_session), so after a
+   save the client simply re-reads them — the board can never drift from
+   the session history. */
+async function refreshProgress(){
+  var tp = await sb.from('track_progress').select('*').eq('user_id', state.user.id);
+  if (tp.error) throw tp.error;
+  state.progress = {};
+  (tp.data || []).forEach(function(r){ state.progress[r.track] = r; });
+}
+
+/* One request id per submission, kept across retries: a double-submit or
+   a network retry can never record the same session twice — the database
+   returns the original row when a request id repeats. Any change to the
+   form starts a fresh submission. */
+var pendingRequestId = null;
+function submissionId(){
+  if (!pendingRequestId){
+    pendingRequestId = (window.crypto && crypto.randomUUID)
+      ? crypto.randomUUID()
+      : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(ch){
+          var r = Math.random() * 16 | 0;
+          return (ch === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
   }
+  return pendingRequestId;
 }
 
 $('logForm').addEventListener('submit', async function(ev){
@@ -884,20 +876,22 @@ $('logForm').addEventListener('submit', async function(ev){
   }
   var btn = $('saveSessionBtn'); btn.disabled = true;
   try {
-    var ins = await sb.from('sessions').insert({
-      user_id: state.user.id,
-      session_date: dateStr,
-      anchor_track: c.anchorTrack,
-      satellite_tracks: c.satelliteTracks,
-      script: c.script,
-      minutes: c.minutes,
-      points: c.points,
-      eclipse: c.eclipse,
-      boss_fight: null
-    }).select().single();
+    /* Points are computed by the database (record_session) from the blocks
+       ticked — the client sends what was done, never the score. */
+    var ins = await sb.rpc('record_session', {
+      p_request_id: submissionId(),
+      p_session_date: dateStr,
+      p_anchor_track: c.anchorTrack,
+      p_satellite_tracks: c.satelliteTracks,
+      p_script: c.script,
+      p_eclipse: c.eclipse,
+      p_boss_fight: null
+    });
     if (ins.error) throw ins.error;
-    await applyTrackPoints(c.per, dateStr);
-    state.sessions.unshift(ins.data);
+    pendingRequestId = null;
+    var saved = Array.isArray(ins.data) ? ins.data[0] : ins.data;
+    await refreshProgress();
+    state.sessions.unshift(saved);
     state.sessions.sort(function(a, b){
       if (a.session_date !== b.session_date) return a.session_date < b.session_date ? 1 : -1;
       return a.created_at < b.created_at ? 1 : -1;
@@ -905,7 +899,7 @@ $('logForm').addEventListener('submit', async function(ev){
     ['fAnchorDone','fSat1Done','fSat2Done','fScriptDone','fEclipse'].forEach(function(id){ $(id).checked = false; });
     $('normalBlocks').style.opacity = '1';
     $('fAnchorMins').textContent = '15';
-    showMsg($('logMsg'), 'Logged: ' + c.minutes + ' min, +' + c.points + ' pts' + (c.eclipse ? ' — eclipse day, streak safe 🌒' : '') + '. The scoreboard remembers.', 'ok');
+    showMsg($('logMsg'), 'Logged: ' + saved.minutes + ' min, +' + saved.points + ' pts' + (c.eclipse ? ' — eclipse day, streak safe 🌒' : '') + '. The scoreboard remembers.', 'ok');
     renderDashboard();
   } catch (err) {
     showMsg($('logMsg'), 'Could not save: ' + (err.message || err), 'err');
@@ -922,27 +916,25 @@ async function recordBossFight(result){
   if (!sb || !state.user) return;
   hideMsg($('bfMsg'));
   var trackId = $('bfTrack').value;
-  var pts = result === 'win' ? 100 : 25;
   var dateStr = todayStr();
   try {
-    var ins = await sb.from('sessions').insert({
-      user_id: state.user.id,
-      session_date: dateStr,
-      anchor_track: trackId,
-      satellite_tracks: [],
-      script: null,
-      minutes: 10,
-      points: pts,
-      eclipse: false,
-      boss_fight: result
-    }).select().single();
+    var ins = await sb.rpc('record_session', {
+      p_request_id: submissionId(),
+      p_session_date: dateStr,
+      p_anchor_track: trackId,
+      p_satellite_tracks: [],
+      p_script: null,
+      p_eclipse: false,
+      p_boss_fight: result
+    });
     if (ins.error) throw ins.error;
-    var per = {}; per[trackId] = pts;
-    await applyTrackPoints(per, dateStr);
-    state.sessions.unshift(ins.data);
+    pendingRequestId = null;
+    var saved = Array.isArray(ins.data) ? ins.data[0] : ins.data;
+    await refreshProgress();
+    state.sessions.unshift(saved);
     showMsg($('bfMsg'), result === 'win'
-      ? '⚔️ Boss Fight won — +' + pts + ' pts to ' + TRACK_BY_ID[trackId].name + '. Check whether that earns a level-up on the track card.'
-      : 'Recorded — +' + pts + ' pts to ' + TRACK_BY_ID[trackId].name + ' for showing up. The rematch writes itself into next week\u2019s satellites.', 'ok');
+      ? '⚔️ Boss Fight won — +' + saved.points + ' pts to ' + TRACK_BY_ID[trackId].name + '. Check whether that earns a level-up on the track card.'
+      : 'Recorded — +' + saved.points + ' pts to ' + TRACK_BY_ID[trackId].name + ' for showing up. The rematch writes itself into next week\u2019s satellites.', 'ok');
     renderDashboard();
   } catch (err) {
     showMsg($('bfMsg'), 'Could not save: ' + (err.message || err), 'err');
